@@ -12,9 +12,9 @@ namespace RollerSplat.Tests
         }
 
         [Test]
-        public void ComputeOrthoSize_Portrait_FitsWidth()
+        public void ComputeOrthoSize_Portrait_PadsWidth()
         {
-            Assert.AreEqual(10f / (9f / 16f) / 2f + 1f,
+            Assert.AreEqual((10f + 2f) / 2f / (9f / 16f),
                 LevelLoader.ComputeOrthoSize(new Vector2(10, 6), 9f / 16f, 1f), 1e-4);
         }
     }

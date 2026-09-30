@@ -10,10 +10,13 @@ Làm lần lượt các bước dưới đây. Tên field trong Inspector đư�
 
 1. Trong `Assets/_Project/Sprites/`: chuột phải → **Create → 2D → Sprites → Square**, đặt tên `Square`.
    Tiếp tục **Create → 2D → Sprites → Circle**, đặt tên `Circle`.
-2. Mở **Window → 2D → Tile Palette** → **Create New Palette**, tên `RollerSplat`, lưu vào `Assets/_Project/Tiles/`.
-3. Kéo sprite `Square` vào palette → lưu tile thành `Assets/_Project/Tiles/FloorTile.asset`.
-4. Chọn sprite `Square` lần nữa, kéo vào palette → lưu thành `WallTile.asset`.
+2. Mở **Window → 2D → Tile Palette** → bấm menu thả xuống tên palette → **Create New Tile Palette**,
+   tên `RollerSplat`, bấm **Create** và chọn thư mục `Assets/_Project/Tiles/`.
+3. Kéo sprite `Square` vào lưới của palette → Unity hỏi thư mục lưu → chọn `Assets/_Project/Tiles/`.
+   Unity tạo tile tên `Square.asset` — đổi tên (F2) thành `FloorTile`.
+4. Chọn `FloorTile.asset` → **Ctrl+D** để nhân bản → đổi tên thành `WallTile`.
    Chọn `WallTile.asset`, đổi **Color** sang màu tường (ví dụ xanh đậm `#1E2A44`).
+   Kéo `WallTile.asset` vào một ô trống của palette.
    > `FloorTile` giữ màu trắng — màu của ô chưa sơn / đã sơn do script tô lúc chạy.
 
 ## Bước 2 — Tạo prefab level
@@ -79,7 +82,9 @@ Tạo `Level_02` bằng cách **Duplicate** prefab `Level_01` (Ctrl+D), mở ra,
 
 ## Bước 3 — Scene `Game`
 
-1. **File → New Scene → Basic 2D (URP)** (hoặc Empty rồi thêm Camera) → lưu thành `Assets/_Project/Scenes/Game.unity`.
+1. **File → New Scene** → chọn template **Lit 2D (URP)** (có sẵn Camera orthographic và Global Light 2D)
+   → **Create** → lưu thành `Assets/_Project/Scenes/Game.unity`.
+   (Nếu không thấy template này: chọn **Empty**, rồi thêm **Camera** và **Light → Global Light 2D**.)
 2. `Main Camera`: **Projection = Orthographic**, Position `(0,0,-10)`, Background tuỳ chọn.
 3. Tạo các GameObject rỗng và thêm component:
 
@@ -196,5 +201,5 @@ Bấm **Play** trong Scene `Game`:
 
 ## Chạy test
 
-**Window → General → Test Runner → EditMode → Run All** (21 test cho GridModel, GridManager,
-SwipeInput, LevelLoader).
+**Window → General → Test Runner → EditMode → Run All** (24 test cho GridModel, GridManager,
+SwipeInput, SwipeTracker, LevelLoader).

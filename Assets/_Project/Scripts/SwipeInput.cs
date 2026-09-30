@@ -14,8 +14,7 @@ namespace RollerSplat
         [Tooltip("Khoảng kéo tối thiểu, tính theo tỉ lệ chiều cao màn hình.")]
         [SerializeField, Range(0.01f, 0.3f)] float minSwipeFraction = 0.05f;
 
-        Vector2 pressStart;
-        bool tracking;
+        readonly SwipeTracker tracker = new SwipeTracker();
 
         void Update()
         {
@@ -39,25 +38,13 @@ namespace RollerSplat
             var pointer = Pointer.current;
             if (pointer == null) return;
 
-            if (pointer.press.wasPressedThisFrame)
-            {
-                pressStart = pointer.position.ReadValue();
-                tracking = true;
-            }
-            else if (!pointer.press.isPressed)
-            {
-                tracking = false;
-            }
-
-            if (!tracking) return;
-
-            var delta = pointer.position.ReadValue() - pressStart;
-            var dir = DirectionFromDelta(delta, minSwipeFraction * Screen.height);
-            if (dir.HasValue)
-            {
-                tracking = false; // one swipe per press
-                Emit(dir.Value);
-            }
+            var dir = tracker.Step(
+                pointer.press.wasPressedThisFrame,
+                pointer.press.isPressed,
+                pointer.press.wasReleasedThisFrame,
+                pointer.position.ReadValue(),
+                minSwipeFraction * Screen.height);
+            if (dir.HasValue) Emit(dir.Value);
         }
 
         void Emit(Vector3Int dir) => OnSwipe?.Invoke(dir);

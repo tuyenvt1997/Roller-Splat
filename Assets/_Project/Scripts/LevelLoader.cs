@@ -97,10 +97,10 @@ namespace RollerSplat
             cam.orthographicSize = ComputeOrthoSize(bounds.size, cam.aspect, cameraPadding);
         }
 
-        /// <summary>Orthographic size that fits a world-space box of boundsSize, plus padding.</summary>
+        /// <summary>Orthographic size that fits a world-space box of boundsSize with padding on every side.</summary>
         public static float ComputeOrthoSize(Vector2 boundsSize, float aspect, float padding)
         {
-            return Mathf.Max(boundsSize.y / 2f, boundsSize.x / 2f / aspect) + padding;
+            return Mathf.Max((boundsSize.y + 2f * padding) / 2f, (boundsSize.x + 2f * padding) / 2f / aspect);
         }
     }
 }

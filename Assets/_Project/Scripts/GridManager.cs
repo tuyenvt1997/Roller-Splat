@@ -13,7 +13,19 @@ namespace RollerSplat
         /// <summary>(paintedCount, totalCount)</summary>
         public event Action<int, int> OnProgressChanged;
 
+        /// <summary>Raised right after a cell switches to the paint colour (drives the paint pop effect).</summary>
+        public event Action<Vector3Int> OnCellPainted;
+
+        /// <summary>Floor tilemap of the current level (null before Setup).</summary>
+        public Tilemap Floor => floor;
+
+        /// <summary>Level currently set up (null before Setup).</summary>
+        public Level CurrentLevel => level;
+
         public GridModel Model { get; private set; } = new GridModel(Array.Empty<Vector3Int>());
+
+        public Color PaintColor => level != null ? level.PaintColor : Color.white;
+        public float CellSize => floor != null ? floor.layoutGrid.cellSize.x : 1f;
 
         Level level;
         Tilemap floor;
@@ -64,10 +76,13 @@ namespace RollerSplat
 
         public bool IsWalkable(Vector3Int cell) => Model.IsWalkable(cell);
 
-        public bool PaintCell(Vector3Int cell)
+        /// <param name="playEffects">False paints the cell instantly without raising OnCellPainted
+        /// (used for the start cell, so the level opens without a flash under the ball).</param>
+        public bool PaintCell(Vector3Int cell, bool playEffects = true)
         {
             if (!Model.TryPaint(cell)) return false;
             SetCellColor(cell, level.PaintColor);
+            if (playEffects) OnCellPainted?.Invoke(cell);
             OnProgressChanged?.Invoke(Model.PaintedCount, Model.TotalCount);
             return true;
         }

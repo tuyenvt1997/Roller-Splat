@@ -28,6 +28,7 @@ namespace RollerSplat
         public int CurrentIndex { get; private set; } = -1;
         public int LevelCount => levels.Count;
         public bool IsLastLevel => CurrentIndex == levels.Count - 1;
+        public Level Current => current;
 
         public void Load(int index)
         {

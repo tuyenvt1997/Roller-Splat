@@ -20,6 +20,7 @@ namespace RollerSplat
         public int TotalCount => walkable.Count;
         public int PaintedCount => painted.Count;
         public bool IsComplete => TotalCount > 0 && PaintedCount == TotalCount;
+        public IEnumerable<Vector3Int> Cells => walkable;
 
         public bool IsWalkable(Vector3Int cell) => walkable.Contains(cell);
         public bool IsPainted(Vector3Int cell) => painted.Contains(cell);

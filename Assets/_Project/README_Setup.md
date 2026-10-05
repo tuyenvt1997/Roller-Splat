@@ -172,6 +172,31 @@ Tạo `Level_02` bằng cách **Duplicate** prefab `Level_01` (Ctrl+D), mở ra,
    - `NextButton` → **On Click ()** → `+` → kéo `GameManager` → chọn **GameManager → OnNextPressed**.
    - `RestartButton` → **On Click ()** → `+` → kéo `GameManager` → chọn **GameManager → OnRestartPressed**.
 
+> **Clone từ git?** Kit **GUI Pro – SuperCasual (Layer Lab)** là asset trả phí nên không có trong repo
+> (xem `.gitignore`). Mua/tải từ Unity Asset Store và import vào `Assets/Layer Lab/` trước khi mở các
+> scene, nếu không loading, menu và popup sẽ thiếu hình.
+>
+> **Dùng popup của GUI Pro – SuperCasual (Layer Lab):** mở scene `Game` rồi bấm
+> **Tools → Roller Splat → Rebuild Popups**. Lệnh này thay `WinPanel` cũ bằng popup **CLEAR!** 3 sao
+> (`PopupDim_Play_StageClear`) và popup thua **DEFEAT / TIME'S UP!** (`PopupDim_Play_Result_Defeat`),
+> đặt trên một `PopupCanvas` riêng, thêm đồng hồ `TimeText` lên HUD, rồi tự lưu scene. Level, tile
+> và phần còn lại của scene không bị đụng tới. Màn loading theo style kit: **Tools → Roller Splat → Build Loading Scene**.
+>
+> **Tools → Roller Splat → Restyle HUD** đổi các nút trên HUD sang nút của kit (xanh lá), khung chứa
+> `LevelText` / `ProgressText` sang nút tím / xanh trời, chữ sang font viền của kit. Vị trí, kích thước
+> và On Click giữ nguyên; khung đang neo giữa màn sẽ được neo lại vào góc trên cho màn hình dài.
+>
+> **Màn Menu:** **Tools → Roller Splat → Build Menu Scene** tạo `Menu.unity` (tên game, "LEVEL N",
+> nút PLAY, nút bánh răng mở Settings). Sau đó chạy lại **Build Loading Scene** để Loading mở Menu,
+> và **Rebuild Popups** để scene Game có nút bánh răng. Thứ tự Build Settings: Loading → Menu → Game.
+>
+> **Settings** (popup `Settings` của kit): slider Music / SFX (lưu trong `GameSettings`; game chưa có âm
+> thanh, khi thêm nhạc hãy đọc `GameSettings.MusicVolume` / `SfxVolume` và nghe event `Changed`),
+> **Reset Progress** (có hỏi xác nhận) và, khi mở trong game, **Home** về Menu. Trong game, mở Settings
+> sẽ dừng game (đồng hồ, bóng). Level đang chơi được lưu (`GameProgress`) nên PLAY chơi tiếp từ đó.
+>
+> Font của kit không có dấu tiếng Việt nên chữ trên popup để tiếng Anh.
+
 > **Chữ tiếng Việt bị ô vuông?** Font mặc định của TMP có thể thiếu dấu. Chọn một font hỗ trợ tiếng Việt
 > (ví dụ Roboto, Arial), **Window → TextMeshPro → Font Asset Creator** hoặc chuột phải font →
 > **Create → TextMeshPro → Font Asset** (Atlas Population Mode = Dynamic), rồi gán cho các text.
@@ -185,7 +210,10 @@ Tạo `Level_02` bằng cách **Duplicate** prefab `Level_01` (Ctrl+D), mở ra,
 Bấm **Play** trong Scene `Game`:
 
 - Phím **mũi tên / WASD** hoặc **kéo chuột / vuốt** để lăn bóng.
-- Sơn kín 100% → sau 0.5s hiện `WinPanel` → **Next** sang màn tiếp. Hết màn → quay lại Level 1.
+- Sơn kín 100% → sau 1.5s hiện popup thắng → **Next** sang màn tiếp. Hết màn → quay lại Level 1.
+  Số sao theo thời gian còn lại: ≥ 2/3 → 3 sao, ≥ 1/3 → 2 sao, còn lại 1 sao.
+- Mỗi level có `timeLimit` (giây, mặc định 60, đặt 0 = không giới hạn) trên component **Level** của prefab.
+  Hết giờ mà chưa sơn kín → popup thua → **Retry** chơi lại màn.
 - **Restart** chơi lại màn hiện tại.
 
 ## Xử lý sự cố

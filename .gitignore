@@ -27,3 +27,12 @@
 sysinfo.txt
 crashlytics-buildid.txt
 /.superpowers/
+
+# Paid Asset Store package (GUI Pro - SuperCasual by Layer Lab): its license forbids redistribution,
+# so it is not committed. Import it from the Asset Store into Assets/Layer Lab/ after cloning.
+/[Aa]ssets/Layer Lab/
+/[Aa]ssets/Layer Lab.meta
+
+# Reference screenshots
+/*.jpg
+/*.png

@@ -36,3 +36,6 @@ crashlytics-buildid.txt
 # Reference screenshots
 /*.jpg
 /*.png
+
+# Raw screen recordings (the showcase copy lives in docs/assets/)
+/*.mp4

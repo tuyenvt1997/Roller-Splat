@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roller Splat 2D — Unity Puzzle Game | tuyenvt</title>
+<meta name="description" content="Roller Splat 2D: game puzzle vuốt để sơn kín màn chơi, làm bằng Unity 6 + C#. Showcase tính năng, kiến trúc và video gameplay.">
+<meta property="og:title" content="Roller Splat 2D — Unity Puzzle Game">
+<meta property="og:description" content="Game puzzle 2D làm bằng Unity 6, C#, Tilemap, Input System, URP 2D. 10 level, 34 unit test.">
+<link rel="icon" href="assets/ball_red_large.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Be+Vietnam+Pro:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #12142b;
+    --bg2: #1b1e3d;
+    --card: #232750;
+    --line: #34397a;
+    --text: #eef0ff;
+    --muted: #a9aed8;
+    --pink: #ff4f8b;
+    --yellow: #ffd23f;
+    --cyan: #3ee6c4;
+    --blue: #4f8bff;
+    --radius: 18px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Be Vietnam Pro", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+  a { color: var(--cyan); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1, h2, h3 { font-family: "Baloo 2", sans-serif; line-height: 1.15; }
+  code, pre { font-family: "JetBrains Mono", monospace; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+  /* nav */
+  nav {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(18, 20, 43, .85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 62px; }
+  nav .logo { display: flex; align-items: center; gap: 10px; font-family: "Baloo 2"; font-weight: 800; font-size: 1.25rem; color: var(--text); }
+  nav .logo img { width: 28px; height: 28px; }
+  nav ul { display: flex; gap: 22px; list-style: none; }
+  nav ul a { color: var(--muted); font-weight: 500; font-size: .95rem; }
+  nav ul a:hover { color: var(--text); text-decoration: none; }
+  @media (max-width: 760px) { nav ul { display: none; } }
+
+  /* hero */
+  .hero { padding: 72px 0 40px; position: relative; }
+  .hero::before {
+    content: ""; position: absolute; inset: 0; z-index: -1;
+    background:
+      radial-gradient(600px 300px at 15% 10%, rgba(255, 79, 139, .22), transparent 70%),
+      radial-gradient(600px 300px at 85% 30%, rgba(62, 230, 196, .18), transparent 70%);
+  }
+  .hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 48px; align-items: center; }
+  @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } }
+  .hero-grid > *, .arch > *, .demo > *, .stats > * { min-width: 0; }
+  #board canvas { width: 100%; max-width: 336px; height: auto; }
+  .tag {
+    display: inline-block; padding: 4px 14px; border-radius: 99px;
+    background: rgba(255, 210, 63, .14); color: var(--yellow);
+    font-weight: 600; font-size: .85rem; margin-bottom: 18px;
+  }
+  .hero h1 { font-size: clamp(2.6rem, 6vw, 4.2rem); font-weight: 800; }
+  .hero h1 .splat {
+    background: linear-gradient(90deg, var(--pink), var(--yellow), var(--cyan));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hero p.lead { color: var(--muted); font-size: 1.12rem; margin: 18px 0 28px; max-width: 540px; }
+  .btns { display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 22px; border-radius: 14px; font-weight: 600;
+    border: 2px solid transparent; transition: transform .15s;
+  }
+  .btn:hover { transform: translateY(-2px); text-decoration: none; }
+  .btn-primary { background: var(--pink); color: #fff; box-shadow: 0 6px 0 #b8295c; }
+  .btn-ghost { border-color: var(--line); color: var(--text); }
+
+  .video-frame {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 28px; padding: 12px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, .45);
+  }
+  .video-frame video { width: 100%; max-height: 640px; display: block; border-radius: 20px; background: #000; }
+  .video-cap { text-align: center; color: var(--muted); font-size: .85rem; margin-top: 10px; }
+
+  /* stats */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 40px 0 0; }
+  @media (max-width: 700px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+  .stat { background: var(--bg2); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; text-align: center; }
+  .stat b { display: block; font-family: "Baloo 2"; font-size: 2.3rem; line-height: 1; }
+  .stat:nth-child(1) b { color: var(--pink); }
+  .stat:nth-child(2) b { color: var(--yellow); }
+  .stat:nth-child(3) b { color: var(--cyan); }
+  .stat:nth-child(4) b { color: var(--blue); }
+  .stat span { color: var(--muted); font-size: .9rem; }
+
+  /* sections */
+  section { padding: 80px 0 20px; }
+  .eyebrow { color: var(--pink); font-weight: 600; text-transform: uppercase; letter-spacing: .12em; font-size: .8rem; }
+  section h2 { font-size: clamp(1.9rem, 4vw, 2.6rem); margin: 6px 0 14px; }
+  section .sub { color: var(--muted); max-width: 720px; margin-bottom: 36px; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 24px; transition: transform .2s, border-color .2s;
+  }
+  .card:hover { transform: translateY(-4px); border-color: var(--pink); }
+  .card .ic { font-size: 1.8rem; margin-bottom: 8px; }
+  .card h3 { font-size: 1.3rem; margin-bottom: 6px; }
+  .card p, .card li { color: var(--muted); font-size: .95rem; }
+  .card ul { padding-left: 18px; margin-top: 6px; }
+  .card code { color: var(--yellow); font-size: .85em; }
+
+  /* demo */
+  .demo { display: grid; grid-template-columns: auto 1fr; gap: 40px; align-items: center; }
+  @media (max-width: 800px) { .demo { grid-template-columns: 1fr; justify-items: center; } }
+  #board {
+    background: var(--bg2); border: 1px solid var(--line); border-radius: 22px;
+    padding: 14px; touch-action: none; user-select: none; cursor: grab;
+  }
+  #board canvas { display: block; }
+  .demo-info h3 { font-size: 1.5rem; margin-bottom: 8px; }
+  .demo-info p { color: var(--muted); margin-bottom: 14px; }
+  .progress { height: 14px; background: var(--bg2); border-radius: 99px; overflow: hidden; border: 1px solid var(--line); }
+  .progress i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--pink), var(--yellow)); transition: width .25s; }
+  .demo-row { display: flex; align-items: center; gap: 14px; margin-top: 14px; flex-wrap: wrap; }
+  .demo-row button {
+    font: inherit; font-weight: 600; cursor: pointer;
+    background: var(--card); color: var(--text); border: 1px solid var(--line);
+    padding: 8px 16px; border-radius: 12px;
+  }
+  .demo-row button:hover { border-color: var(--cyan); }
+  #demoMsg { color: var(--yellow); font-weight: 600; }
+  kbd { background: var(--card); border: 1px solid var(--line); border-bottom-width: 3px; border-radius: 6px; padding: 1px 7px; font-size: .85em; }
+
+  /* architecture */
+  .arch { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  @media (max-width: 900px) { .arch { grid-template-columns: 1fr; } }
+  pre {
+    background: #0c0e22; border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 20px; overflow-x: auto; font-size: .85rem; line-height: 1.6; color: #d5d8ff;
+  }
+  pre .k { color: var(--pink); }
+  pre .t { color: var(--cyan); }
+  pre .c { color: #6f75a8; }
+  pre .s { color: var(--yellow); }
+  .flow { display: flex; flex-direction: column; gap: 10px; }
+  .flow .node {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 12px 16px; font-size: .92rem;
+  }
+  .flow .node b { color: var(--cyan); font-family: "JetBrains Mono"; font-size: .9rem; }
+  .flow .node span { color: var(--muted); }
+  .flow .arrow { text-align: center; color: var(--pink); font-size: .8rem; font-family: "JetBrains Mono"; }
+
+  /* stack */
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+  .chip { background: var(--card); border: 1px solid var(--line); border-radius: 99px; padding: 7px 16px; font-size: .9rem; }
+
+  /* timeline */
+  .timeline { border-left: 3px solid var(--line); margin-left: 8px; }
+  .tl { position: relative; padding: 0 0 22px 26px; }
+  .tl::before {
+    content: ""; position: absolute; left: -10px; top: 6px; width: 17px; height: 17px;
+    border-radius: 50%; background: var(--pink); border: 3px solid var(--bg);
+  }
+  .tl code { color: var(--yellow); font-size: .8rem; }
+  .tl p { color: var(--muted); font-size: .95rem; }
+
+  footer { padding: 70px 0 40px; text-align: center; color: var(--muted); }
+  footer h2 { color: var(--text); font-size: 2rem; margin-bottom: 10px; }
+  footer .btns { justify-content: center; margin: 22px 0 36px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="logo" href="#"><img src="assets/ball_red_large.png" alt="">Roller Splat</a>
+    <ul>
+      <li><a href="#features">Tính năng</a></li>
+      <li><a href="#demo">Chơi thử</a></li>
+      <li><a href="#tech">Kỹ thuật</a></li>
+      <li><a href="#architecture">Kiến trúc</a></li>
+      <li><a href="#process">Quy trình</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <span class="tag">🎮 Unity 6 · C# · Puzzle 2D</span>
+        <h1>Roller <span class="splat">Splat</span> 2D</h1>
+        <p class="lead">
+          Game puzzle vuốt-để-sơn: bóng trượt thẳng tới khi chạm tường, sơn mọi ô nó lăn qua.
+          Sơn kín 100% sàn trước khi hết giờ để qua màn và nhận tới 3 sao.
+          Dự án cá nhân làm trọn vòng đời: thiết kế, code, test, UI, hiệu ứng.
+        </p>
+        <div class="btns">
+          <a class="btn btn-primary" href="#video">▶ Xem gameplay</a>
+          <a class="btn btn-ghost" href="https://github.com/tuyenvt1997/Roller-Splat" target="_blank" rel="noopener">⌥ Source code</a>
+        </div>
+      </div>
+      <div id="video">
+        <div class="video-frame">
+          <video src="assets/gameplay.mp4" controls muted loop playsinline preload="metadata"></video>
+        </div>
+        <p class="video-cap">Video gameplay thực tế quay trong Unity Editor</p>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><b>10</b><span>level thiết kế sẵn</span></div>
+      <div class="stat"><b>34</b><span>unit test EditMode</span></div>
+      <div class="stat"><b>3</b><span>scene: Loading · Menu · Game</span></div>
+      <div class="stat"><b>~3.7k</b><span>dòng C# (game + editor + test)</span></div>
+    </div>
+  </div>
+</header>
+
+<section id="features">
+  <div class="wrap">
+    <div class="eyebrow">Gameplay</div>
+    <h2>Những gì game làm được</h2>
+    <p class="sub">Một vòng chơi hoàn chỉnh từ màn hình loading tới popup thắng/thua, có lưu tiến trình và tuỳ chỉnh.</p>
+    <div class="cards">
+      <div class="card"><div class="ic">👆</div><h3>Điều khiển vuốt & bàn phím</h3>
+        <p>Vuốt bằng chuột/cảm ứng hoặc phím mũi tên/WASD. Nhận cả những cú “flick” cực nhanh — hướng được tính ngay trong frame thả tay.</p></div>
+      <div class="card"><div class="ic">🎨</div><h3>Sơn kín màn chơi</h3>
+        <p>Bóng trượt liền một mạch theo lưới, mỗi ô đi qua đổi sang màu sơn. Thanh tiến độ cập nhật realtime; đủ 100% là thắng.</p></div>
+      <div class="card"><div class="ic">⏱️</div><h3>Level tính giờ & 3 sao</h3>
+        <p>Mỗi level có thể đặt giới hạn thời gian. Còn ≥ 2/3 thời gian → 3 sao, ≥ 1/3 → 2 sao, hết giờ → popup thua & chơi lại.</p></div>
+      <div class="card"><div class="ic">✨</div><h3>Game feel / “juice”</h3>
+        <ul>
+          <li>Bóng kéo giãn khi trượt, squash & wobble khi đập tường</li>
+          <li>Bắn giọt sơn ngược hướng tường, vệt lấp lánh theo đường đi</li>
+          <li>Ô sàn “pop” + flash trắng, lan dần theo sau bóng</li>
+          <li>Pháo hoa khi thắng, tự scale theo kích thước level</li>
+        </ul></div>
+      <div class="card"><div class="ic">⏳</div><h3>Loading screen có hồn</h3>
+        <p>Load scene bất đồng bộ; quả bóng lăn trên thanh progress, sơn thanh và bắn giọt sơn. Thanh không bao giờ chạy trước tiến độ load thật.</p></div>
+      <div class="card"><div class="ic">💾</div><h3>Menu, Settings & lưu game</h3>
+        <p>Menu hiển thị level đang chơi tiếp, popup Settings dùng chung (âm lượng, reset tiến trình có xác nhận, nút Home). Lưu bằng PlayerPrefs.</p></div>
+      <div class="card"><div class="ic">📱</div><h3>Camera responsive</h3>
+        <p>Camera orthographic tự tính size để vừa mọi level trên mọi tỉ lệ màn hình, có padding thêm cho màn dọc (portrait).</p></div>
+      <div class="card"><div class="ic">🧩</div><h3>10 level bằng Tilemap</h3>
+        <p>Level dựng bằng Tilemap + Tile Palette kéo thả, mỗi level là 1 prefab với màu sàn/màu sơn/thời gian riêng.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="demo">
+  <div class="wrap">
+    <div class="eyebrow">Interactive</div>
+    <h2>Chơi thử luật game ngay trên web</h2>
+    <p class="sub">Bản mô phỏng nhỏ bằng JavaScript, dùng đúng thuật toán trượt như <code>GridModel.GetSlidePath</code> trong game Unity.</p>
+    <div class="demo">
+      <div id="board"><canvas id="cv" width="336" height="336"></canvas></div>
+      <div class="demo-info">
+        <h3>Sơn kín tất cả các ô!</h3>
+        <p>Dùng <kbd>←</kbd> <kbd>↑</kbd> <kbd>→</kbd> <kbd>↓</kbd> / <kbd>WASD</kbd> hoặc vuốt trên bảng. Bóng chỉ dừng khi chạm tường.</p>
+        <div class="progress"><i id="bar"></i></div>
+        <div class="demo-row">
+          <span id="pct">0%</span>
+          <span id="demoMsg"></span>
+          <button id="reset">↻ Chơi lại</button>
+          <button id="next">Level khác →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tech">
+  <div class="wrap">
+    <div class="eyebrow">Engineering</div>
+    <h2>Điểm nhấn kỹ thuật</h2>
+    <p class="sub">Ưu tiên code dễ test, dễ mở rộng và tách biệt trách nhiệm rõ ràng.</p>
+    <div class="cards">
+      <div class="card"><div class="ic">🧠</div><h3>Logic tách khỏi Unity</h3>
+        <p><code>GridModel</code>, <code>SwipeTracker</code>, <code>LevelTimer</code> là C# thuần — không phụ thuộc MonoBehaviour — nên test được bằng EditMode test, chạy trong mili-giây.</p></div>
+      <div class="card"><div class="ic">📐</div><h3>Di chuyển theo lưới, không physics</h3>
+        <p>Không dùng Rigidbody2D. Đường trượt được tính trước bằng cách dò ô walkable, rồi nội suy mượt bằng coroutine với ease-out. Bóng luôn dừng đúng tâm ô — không có bug lệch vị trí.</p></div>
+      <div class="card"><div class="ic">📡</div><h3>Giao tiếp bằng C# event</h3>
+        <p><code>OnSwipe</code>, <code>OnSlideEnded</code>, <code>OnCellPainted</code>, <code>OnProgressChanged</code>, <code>OnWon/OnLost</code>… Tham chiếu gán qua Inspector, <b>không dùng <code>Find*</code></b>.</p></div>
+      <div class="card"><div class="ic">🧪</div><h3>Test-Driven Development</h3>
+        <p>34 test cho grid, slide path, swipe (gồm flick nhanh), loader, camera fit, timer/sao và save data. Save test đổi key prefix để không đụng dữ liệu thật.</p></div>
+      <div class="card"><div class="ic">🛠️</div><h3>Editor tooling</h3>
+        <p>Viết Editor script tự động dựng scene Loading/Menu/Game và UI từ code — dựng lại scene chỉ bằng 1 click, tránh lỗi thao tác tay.</p></div>
+      <div class="card"><div class="ic">🎛️</div><h3>Input System mới</h3>
+        <p>Đọc trực tiếp <code>Keyboard.current</code> / <code>Pointer.current</code>; một state machine nhỏ xử lý press → drag → release cho cả chuột và cảm ứng.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="architecture">
+  <div class="wrap">
+    <div class="eyebrow">Architecture</div>
+    <h2>Kiến trúc & luồng dữ liệu</h2>
+    <p class="sub">Mỗi script một trách nhiệm. Luồng một lượt vuốt đi qua các thành phần như sau:</p>
+    <div class="arch">
+      <div class="flow">
+        <div class="node"><b>SwipeInput</b> <span>— phím / vuốt → hướng</span></div>
+        <div class="arrow">OnSwipe(dir) ↓</div>
+        <div class="node"><b>BallController</b> <span>— lấy path, trượt bằng coroutine</span></div>
+        <div class="arrow">GetSlidePath / PaintCell ↓</div>
+        <div class="node"><b>GridManager → GridModel</b> <span>— tilemap ↔ logic lưới, sơn ô</span></div>
+        <div class="arrow">OnCellPainted · OnProgressChanged ↓</div>
+        <div class="node"><b>PaintCellEffects · BallEffects · UIManager</b> <span>— hiệu ứng & HUD</span></div>
+        <div class="arrow">IsComplete / LevelTimer ↓</div>
+        <div class="node"><b>GameManager</b> <span>— OnWon / OnLost → popup, lưu tiến trình, LevelLoader.LoadNext()</span></div>
+      </div>
+      <div>
+<pre><span class="c">// GridModel.cs — trái tim của gameplay</span>
+<span class="k">public</span> <span class="t">List</span>&lt;<span class="t">Vector3Int</span>&gt; GetSlidePath(
+    <span class="t">Vector3Int</span> start, <span class="t">Vector3Int</span> dir)
+{
+    <span class="k">var</span> path = <span class="k">new</span> <span class="t">List</span>&lt;<span class="t">Vector3Int</span>&gt;();
+    <span class="k">if</span> (dir == <span class="t">Vector3Int</span>.zero) <span class="k">return</span> path;
+
+    <span class="k">var</span> next = start + dir;
+    <span class="k">while</span> (walkable.Contains(next))
+    {
+        path.Add(next);
+        next += dir;
+    }
+    <span class="k">return</span> path;
+}
+
+<span class="c">// LevelTimer.cs — xếp hạng sao theo thời gian còn lại</span>
+<span class="k">public static int</span> ComputeStars(<span class="k">float</span> remaining, <span class="k">float</span> limit)
+{
+    <span class="k">if</span> (limit &lt;= <span class="s">0f</span>) <span class="k">return</span> <span class="s">3</span>;
+    <span class="k">float</span> left = remaining / limit;
+    <span class="k">if</span> (left &gt;= <span class="s">2f</span> / <span class="s">3f</span> - <span class="s">1e-4f</span>) <span class="k">return</span> <span class="s">3</span>;
+    <span class="k">if</span> (left &gt;= <span class="s">1f</span> / <span class="s">3f</span> - <span class="s">1e-4f</span>) <span class="k">return</span> <span class="s">2</span>;
+    <span class="k">return</span> <span class="s">1</span>;
+}</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="stack">
+  <div class="wrap">
+    <div class="eyebrow">Tech stack</div>
+    <h2>Công nghệ sử dụng</h2>
+    <div class="chips">
+      <span class="chip">Unity 6 (6000.0)</span>
+      <span class="chip">C#</span>
+      <span class="chip">URP 2D Renderer</span>
+      <span class="chip">Tilemap & Tile Palette</span>
+      <span class="chip">Input System 1.x</span>
+      <span class="chip">Unity Test Framework (NUnit)</span>
+      <span class="chip">uGUI + TextMesh Pro</span>
+      <span class="chip">Particle System</span>
+      <span class="chip">Async Scene Loading</span>
+      <span class="chip">PlayerPrefs</span>
+      <span class="chip">Editor Scripting</span>
+      <span class="chip">Git</span>
+    </div>
+  </div>
+</section>
+
+<section id="process">
+  <div class="wrap">
+    <div class="eyebrow">Process</div>
+    <h2>Quy trình phát triển</h2>
+    <p class="sub">Bắt đầu từ spec & plan, phát triển từng lớp có test đi kèm, commit nhỏ theo Conventional Commits.</p>
+    <div class="timeline">
+      <div class="tl"><h3>Spec & kế hoạch</h3><p>Viết design spec: mục tiêu, quyết định kiến trúc, bảng trách nhiệm từng script, phạm vi.</p><code>chore: initial Unity project with Roller Splat spec and plan</code></div>
+      <div class="tl"><h3>Logic lõi + test</h3><p>GridModel viết theo TDD, rồi tới Level data & GridManager bọc Tilemap.</p><code>feat: add GridModel with EditMode tests</code></div>
+      <div class="tl"><h3>Input & di chuyển</h3><p>Swipe/bàn phím, bóng trượt theo lưới với coroutine.</p><code>feat: add swipe/keyboard input and grid ball movement</code></div>
+      <div class="tl"><h3>Vòng chơi</h3><p>Load level, điều kiện thắng, HUD tiến độ, tài liệu dựng scene + level mẫu.</p><code>feat: add level loading, win condition and UI</code></div>
+      <div class="tl"><h3>Sửa lỗi từ playtest</h3><p>Giữ lại cú flick nhanh bị mất, padding camera cho màn dọc.</p><code>fix: keep fast flick swipes, pad portrait camera</code></div>
+      <div class="tl"><h3>Polish & meta-game</h3><p>Loading, Menu, Settings, level tính giờ, popup thắng/thua, hiệu ứng juice.</p><code>feat: kit-styled loading, menu, settings, timed levels and win/lose popups</code></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <h2>Cảm ơn đã xem! 👋</h2>
+    <p>Roller Splat 2D — dự án cá nhân của <b>tuyenvt</b>.</p>
+    <div class="btns">
+      <a class="btn btn-primary" href="https://github.com/tuyenvt1997/Roller-Splat" target="_blank" rel="noopener">Xem source trên GitHub</a>
+      <a class="btn btn-ghost" href="https://github.com/tuyenvt1997" target="_blank" rel="noopener">GitHub profile</a>
+    </div>
+    <small>UI kit: GUI Pro – SuperCasual (Layer Lab, không đi kèm repo do license)</small>
+  </div>
+</footer>
+
+<script>
+// Mini Roller Splat: same rule as GridModel.GetSlidePath — slide until the next cell isn't walkable.
+(function () {
+  const LEVELS = [
+    ["#######",
+     "#S....#",
+     "#.###.#",
+     "#.#...#",
+     "#.#.###",
+     "#.....#",
+     "#######"],
+    ["#######",
+     "#..#.S#",
+     "#..#..#",
+     "#..#..#",
+     "#..#.##",
+     "#.....#",
+     "#######"],
+    ["#######",
+     "#.S...#",
+     "#.#...#",
+     "#...###",
+     "##....#",
+     "#.....#",
+     "#######"]
+  ];
+  const COLORS = ["#ff4f8b", "#3ee6c4", "#ffd23f"];
+  const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
+  const bar = document.getElementById("bar"), pct = document.getElementById("pct"), msg = document.getElementById("demoMsg");
+  const N = 7, C = cv.width / N;
+  let li = 0, walk, painted, ball, anim = null, won;
+
+  function load(i) {
+    li = i % LEVELS.length; walk = new Set(); painted = new Set(); won = false; msg.textContent = "";
+    LEVELS[li].forEach((row, y) => [...row].forEach((ch, x) => {
+      if (ch !== "#") walk.add(x + "," + y);
+      if (ch === "S") ball = { x, y, px: x, py: y };
+    }));
+    paint(ball.x, ball.y); draw();
+  }
+  function paint(x, y) {
+    painted.add(x + "," + y);
+    const p = Math.round(painted.size / walk.size * 100);
+    bar.style.width = p + "%"; pct.textContent = p + "%";
+  }
+  function slide(dx, dy) {
+    if (anim || won) return;
+    const path = [];
+    let nx = ball.x + dx, ny = ball.y + dy;
+    while (walk.has(nx + "," + ny)) { path.push([nx, ny]); nx += dx; ny += dy; }
+    if (!path.length) return;
+    const sx = ball.x, sy = ball.y, t0 = performance.now(), dur = 70 * path.length + 60;
+    anim = true;
+    (function step(now) {
+      const t = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - t, 3);
+      const d = e * path.length;
+      ball.px = sx + dx * d; ball.py = sy + dy * d;
+      for (let k = 0; k < Math.floor(d + 1e-6) && k < path.length; k++) paint(path[k][0], path[k][1]);
+      draw(dx, dy, 1 - t);
+      if (t < 1) return requestAnimationFrame(step);
+      ball.x = ball.px = path[path.length - 1][0]; ball.y = ball.py = path[path.length - 1][1];
+      anim = null; draw();
+      if (painted.size === walk.size) { won = true; msg.textContent = "★★★ Hoàn thành!"; }
+    })(t0);
+  }
+  function rr(x, y, w, h, r) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); ctx.fill(); }
+  function draw(dx = 0, dy = 0, speed = 0) {
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    const col = COLORS[li];
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+      const k = x + "," + y;
+      ctx.fillStyle = !walk.has(k) ? "#34397a" : painted.has(k) ? col : "#e9ebf7";
+      rr(x * C + 2, y * C + 2, C - 4, C - 4, 8);
+    }
+    const s = 1 + 0.25 * speed * (dx || dy ? 1 : 0);
+    ctx.save();
+    ctx.translate(ball.px * C + C / 2, ball.py * C + C / 2);
+    ctx.scale(dx ? s : 1 / s, dy ? s : 1 / s);
+    ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(0, 0, C * 0.34, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = col; ctx.beginPath(); ctx.arc(0, 0, C * 0.26, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+
+  const DIRS = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1], a: [-1, 0], d: [1, 0], w: [0, -1], s: [0, 1] };
+  const board = document.getElementById("board");
+  let active = false;
+  board.addEventListener("pointerenter", () => active = true);
+  document.addEventListener("keydown", e => {
+    const d = DIRS[e.key.length === 1 ? e.key.toLowerCase() : e.key];
+    const r = board.getBoundingClientRect();
+    if (d && (active || (r.top < innerHeight && r.bottom > 0))) { e.preventDefault(); slide(...d); }
+  });
+  let start = null;
+  board.addEventListener("pointerdown", e => { start = [e.clientX, e.clientY]; board.setPointerCapture(e.pointerId); });
+  board.addEventListener("pointerup", e => {
+    if (!start) return;
+    const dx = e.clientX - start[0], dy = e.clientY - start[1]; start = null;
+    if (Math.max(Math.abs(dx), Math.abs(dy)) < 20) return;
+    Math.abs(dx) > Math.abs(dy) ? slide(Math.sign(dx), 0) : slide(0, Math.sign(dy));
+  });
+  document.getElementById("reset").onclick = () => !anim && load(li);
+  document.getElementById("next").onclick = () => !anim && load(li + 1);
+  load(0);
+})();
+</script>
+</body>
+</html>

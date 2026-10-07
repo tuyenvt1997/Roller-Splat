@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roller Splat 2D — Unity Puzzle Game | tuyenvt</title>
-<meta name="description" content="Roller Splat 2D: game puzzle vuốt để sơn kín màn chơi, làm bằng Unity 6 + C#. Showcase tính năng, kiến trúc và video gameplay.">
+<meta name="description" content="Roller Splat 2D: a swipe-to-paint puzzle game built with Unity 6 and C#. Features, architecture and gameplay video.">
 <meta property="og:title" content="Roller Splat 2D — Unity Puzzle Game">
-<meta property="og:description" content="Game puzzle 2D làm bằng Unity 6, C#, Tilemap, Input System, URP 2D. 10 level, 34 unit test.">
+<meta property="og:description" content="2D puzzle game built with Unity 6, C#, Tilemap, Input System and URP 2D. 10 levels, 34 unit tests.">
 <link rel="icon" href="assets/ball_red_large.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Be+Vietnam+Pro:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -191,11 +191,11 @@
   <div class="wrap">
     <a class="logo" href="#"><img src="assets/ball_red_large.png" alt="">Roller Splat</a>
     <ul>
-      <li><a href="#features">Tính năng</a></li>
-      <li><a href="#demo">Chơi thử</a></li>
-      <li><a href="#tech">Kỹ thuật</a></li>
-      <li><a href="#architecture">Kiến trúc</a></li>
-      <li><a href="#process">Quy trình</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#demo">Play</a></li>
+      <li><a href="#tech">Engineering</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#process">Process</a></li>
     </ul>
   </div>
 </nav>
@@ -207,12 +207,12 @@
         <span class="tag">🎮 Unity 6 · C# · Puzzle 2D</span>
         <h1>Roller <span class="splat">Splat</span> 2D</h1>
         <p class="lead">
-          Game puzzle vuốt-để-sơn: bóng trượt thẳng tới khi chạm tường, sơn mọi ô nó lăn qua.
-          Sơn kín 100% sàn trước khi hết giờ để qua màn và nhận tới 3 sao.
-          Dự án cá nhân làm trọn vòng đời: thiết kế, code, test, UI, hiệu ứng.
+          A swipe-to-paint puzzle game: the ball slides straight until it hits a wall, painting every tile it rolls over.
+          Paint 100% of the floor before time runs out to clear the level and earn up to 3 stars.
+          A solo project covering the full cycle: design, code, tests, UI and effects.
         </p>
         <div class="btns">
-          <a class="btn btn-primary" href="#video">▶ Xem gameplay</a>
+          <a class="btn btn-primary" href="#video">▶ Watch gameplay</a>
           <a class="btn btn-ghost" href="https://github.com/tuyenvt1997/Roller-Splat" target="_blank" rel="noopener">⌥ Source code</a>
         </div>
       </div>
@@ -220,15 +220,15 @@
         <div class="video-frame">
           <video src="assets/gameplay.mp4" controls muted loop playsinline preload="metadata"></video>
         </div>
-        <p class="video-cap">Video gameplay thực tế quay trong Unity Editor</p>
+        <p class="video-cap">Real gameplay footage recorded in the Unity Editor</p>
       </div>
     </div>
 
     <div class="stats">
-      <div class="stat"><b>10</b><span>level thiết kế sẵn</span></div>
-      <div class="stat"><b>34</b><span>unit test EditMode</span></div>
-      <div class="stat"><b>3</b><span>scene: Loading · Menu · Game</span></div>
-      <div class="stat"><b>~3.7k</b><span>dòng C# (game + editor + test)</span></div>
+      <div class="stat"><b>10</b><span>handcrafted levels</span></div>
+      <div class="stat"><b>34</b><span>EditMode unit tests</span></div>
+      <div class="stat"><b>3</b><span>scenes: Loading · Menu · Game</span></div>
+      <div class="stat"><b>~3.7k</b><span>lines of C# (game + editor + tests)</span></div>
     </div>
   </div>
 </header>
@@ -236,30 +236,30 @@
 <section id="features">
   <div class="wrap">
     <div class="eyebrow">Gameplay</div>
-    <h2>Những gì game làm được</h2>
-    <p class="sub">Một vòng chơi hoàn chỉnh từ màn hình loading tới popup thắng/thua, có lưu tiến trình và tuỳ chỉnh.</p>
+    <h2>What the game does</h2>
+    <p class="sub">A complete game loop, from the loading screen to the win/lose popups, with saved progress and settings.</p>
     <div class="cards">
-      <div class="card"><div class="ic">👆</div><h3>Điều khiển vuốt & bàn phím</h3>
-        <p>Vuốt bằng chuột/cảm ứng hoặc phím mũi tên/WASD. Nhận cả những cú “flick” cực nhanh — hướng được tính ngay trong frame thả tay.</p></div>
-      <div class="card"><div class="ic">🎨</div><h3>Sơn kín màn chơi</h3>
-        <p>Bóng trượt liền một mạch theo lưới, mỗi ô đi qua đổi sang màu sơn. Thanh tiến độ cập nhật realtime; đủ 100% là thắng.</p></div>
-      <div class="card"><div class="ic">⏱️</div><h3>Level tính giờ & 3 sao</h3>
-        <p>Mỗi level có thể đặt giới hạn thời gian. Còn ≥ 2/3 thời gian → 3 sao, ≥ 1/3 → 2 sao, hết giờ → popup thua & chơi lại.</p></div>
+      <div class="card"><div class="ic">👆</div><h3>Swipe & keyboard controls</h3>
+        <p>Swipe with mouse or touch, or use the arrow keys / WASD. Even very fast flicks register: the direction is resolved in the same frame the finger lifts.</p></div>
+      <div class="card"><div class="ic">🎨</div><h3>Paint the whole board</h3>
+        <p>The ball glides along the grid in one continuous motion, and every tile it passes takes the paint colour. The progress bar updates in real time; 100% wins.</p></div>
+      <div class="card"><div class="ic">⏱️</div><h3>Timed levels & 3 stars</h3>
+        <p>Each level can have a time limit. Finish with ≥ 2/3 of the time left for 3 stars, ≥ 1/3 for 2 stars; run out and the lose popup offers a retry.</p></div>
       <div class="card"><div class="ic">✨</div><h3>Game feel / “juice”</h3>
         <ul>
-          <li>Bóng kéo giãn khi trượt, squash & wobble khi đập tường</li>
-          <li>Bắn giọt sơn ngược hướng tường, vệt lấp lánh theo đường đi</li>
-          <li>Ô sàn “pop” + flash trắng, lan dần theo sau bóng</li>
-          <li>Pháo hoa khi thắng, tự scale theo kích thước level</li>
+          <li>The ball stretches while sliding, then squashes and wobbles when it hits a wall</li>
+          <li>Paint drops spray away from the wall, and a sparkle trail follows the path</li>
+          <li>Floor tiles pop and flash white, rippling along behind the ball</li>
+          <li>Win fireworks that scale to fit any level size</li>
         </ul></div>
-      <div class="card"><div class="ic">⏳</div><h3>Loading screen có hồn</h3>
-        <p>Load scene bất đồng bộ; quả bóng lăn trên thanh progress, sơn thanh và bắn giọt sơn. Thanh không bao giờ chạy trước tiến độ load thật.</p></div>
-      <div class="card"><div class="ic">💾</div><h3>Menu, Settings & lưu game</h3>
-        <p>Menu hiển thị level đang chơi tiếp, popup Settings dùng chung (âm lượng, reset tiến trình có xác nhận, nút Home). Lưu bằng PlayerPrefs.</p></div>
-      <div class="card"><div class="ic">📱</div><h3>Camera responsive</h3>
-        <p>Camera orthographic tự tính size để vừa mọi level trên mọi tỉ lệ màn hình, có padding thêm cho màn dọc (portrait).</p></div>
-      <div class="card"><div class="ic">🧩</div><h3>10 level bằng Tilemap</h3>
-        <p>Level dựng bằng Tilemap + Tile Palette kéo thả, mỗi level là 1 prefab với màu sàn/màu sơn/thời gian riêng.</p></div>
+      <div class="card"><div class="ic">⏳</div><h3>A loading screen with personality</h3>
+        <p>The scene loads asynchronously while a ball rolls along the progress bar, painting it and flicking paint drops behind it. The bar never runs ahead of the real load.</p></div>
+      <div class="card"><div class="ic">💾</div><h3>Menu, settings & save data</h3>
+        <p>The menu shows the level you will continue from. A shared Settings popup has volume sliders, a progress reset with confirmation, and a Home button. Data is saved with PlayerPrefs.</p></div>
+      <div class="card"><div class="ic">📱</div><h3>Responsive camera</h3>
+        <p>The orthographic camera sizes itself to fit any level on any aspect ratio, with extra padding in portrait.</p></div>
+      <div class="card"><div class="ic">🧩</div><h3>10 Tilemap levels</h3>
+        <p>Levels are painted with Tilemap and the Tile Palette. Each level is one prefab with its own floor colour, paint colour and time limit.</p></div>
     </div>
   </div>
 </section>
@@ -267,19 +267,19 @@
 <section id="demo">
   <div class="wrap">
     <div class="eyebrow">Interactive</div>
-    <h2>Chơi thử luật game ngay trên web</h2>
-    <p class="sub">Bản mô phỏng nhỏ bằng JavaScript, dùng đúng thuật toán trượt như <code>GridModel.GetSlidePath</code> trong game Unity.</p>
+    <h2>Try the core mechanic in your browser</h2>
+    <p class="sub">A small JavaScript version that uses the same slide rule as <code>GridModel.GetSlidePath</code> in the Unity game.</p>
     <div class="demo">
       <div id="board"><canvas id="cv" width="336" height="336"></canvas></div>
       <div class="demo-info">
-        <h3>Sơn kín tất cả các ô!</h3>
-        <p>Dùng <kbd>←</kbd> <kbd>↑</kbd> <kbd>→</kbd> <kbd>↓</kbd> / <kbd>WASD</kbd> hoặc vuốt trên bảng. Bóng chỉ dừng khi chạm tường.</p>
+        <h3>Paint every tile!</h3>
+        <p>Use <kbd>←</kbd> <kbd>↑</kbd> <kbd>→</kbd> <kbd>↓</kbd> / <kbd>WASD</kbd> or swipe on the board. The ball only stops when it hits a wall.</p>
         <div class="progress"><i id="bar"></i></div>
         <div class="demo-row">
           <span id="pct">0%</span>
           <span id="demoMsg"></span>
-          <button id="reset">↻ Chơi lại</button>
-          <button id="next">Level khác →</button>
+          <button id="reset">↻ Restart</button>
+          <button id="next">Next level →</button>
         </div>
       </div>
     </div>
@@ -289,21 +289,21 @@
 <section id="tech">
   <div class="wrap">
     <div class="eyebrow">Engineering</div>
-    <h2>Điểm nhấn kỹ thuật</h2>
-    <p class="sub">Ưu tiên code dễ test, dễ mở rộng và tách biệt trách nhiệm rõ ràng.</p>
+    <h2>Engineering highlights</h2>
+    <p class="sub">The focus is code that is easy to test and extend, with a clear separation of responsibilities.</p>
     <div class="cards">
-      <div class="card"><div class="ic">🧠</div><h3>Logic tách khỏi Unity</h3>
-        <p><code>GridModel</code>, <code>SwipeTracker</code>, <code>LevelTimer</code> là C# thuần — không phụ thuộc MonoBehaviour — nên test được bằng EditMode test, chạy trong mili-giây.</p></div>
-      <div class="card"><div class="ic">📐</div><h3>Di chuyển theo lưới, không physics</h3>
-        <p>Không dùng Rigidbody2D. Đường trượt được tính trước bằng cách dò ô walkable, rồi nội suy mượt bằng coroutine với ease-out. Bóng luôn dừng đúng tâm ô — không có bug lệch vị trí.</p></div>
-      <div class="card"><div class="ic">📡</div><h3>Giao tiếp bằng C# event</h3>
-        <p><code>OnSwipe</code>, <code>OnSlideEnded</code>, <code>OnCellPainted</code>, <code>OnProgressChanged</code>, <code>OnWon/OnLost</code>… Tham chiếu gán qua Inspector, <b>không dùng <code>Find*</code></b>.</p></div>
+      <div class="card"><div class="ic">🧠</div><h3>Logic decoupled from Unity</h3>
+        <p><code>GridModel</code>, <code>SwipeTracker</code>, <code>LevelTimer</code> are plain C# classes with no MonoBehaviour dependency, so EditMode tests cover them and run in milliseconds.</p></div>
+      <div class="card"><div class="ic">📐</div><h3>Grid movement, no physics</h3>
+        <p>No Rigidbody2D. The slide path is computed up front by scanning walkable cells, then animated by a coroutine with an ease-out. The ball always stops exactly on a cell centre, so it can never drift off the grid.</p></div>
+      <div class="card"><div class="ic">📡</div><h3>Event-driven communication</h3>
+        <p><code>OnSwipe</code>, <code>OnSlideEnded</code>, <code>OnCellPainted</code>, <code>OnProgressChanged</code>, <code>OnWon/OnLost</code>… References are assigned in the Inspector, with <b>no <code>Find*</code> calls</b>.</p></div>
       <div class="card"><div class="ic">🧪</div><h3>Test-Driven Development</h3>
-        <p>34 test cho grid, slide path, swipe (gồm flick nhanh), loader, camera fit, timer/sao và save data. Save test đổi key prefix để không đụng dữ liệu thật.</p></div>
+        <p>34 tests cover the grid, slide paths, swipes (including fast flicks), the level loader, camera fit, the timer and star rating, and save data. Save tests swap the key prefix so real player data is never touched.</p></div>
       <div class="card"><div class="ic">🛠️</div><h3>Editor tooling</h3>
-        <p>Viết Editor script tự động dựng scene Loading/Menu/Game và UI từ code — dựng lại scene chỉ bằng 1 click, tránh lỗi thao tác tay.</p></div>
-      <div class="card"><div class="ic">🎛️</div><h3>Input System mới</h3>
-        <p>Đọc trực tiếp <code>Keyboard.current</code> / <code>Pointer.current</code>; một state machine nhỏ xử lý press → drag → release cho cả chuột và cảm ứng.</p></div>
+        <p>Editor scripts build the Loading, Menu and Game scenes and their UI from code, so a scene can be rebuilt in one click with no manual setup mistakes.</p></div>
+      <div class="card"><div class="ic">🎛️</div><h3>New Input System</h3>
+        <p>Reads <code>Keyboard.current</code> / <code>Pointer.current</code> directly; a small state machine handles press → drag → release for both mouse and touch.</p></div>
     </div>
   </div>
 </section>
@@ -311,22 +311,22 @@
 <section id="architecture">
   <div class="wrap">
     <div class="eyebrow">Architecture</div>
-    <h2>Kiến trúc & luồng dữ liệu</h2>
-    <p class="sub">Mỗi script một trách nhiệm. Luồng một lượt vuốt đi qua các thành phần như sau:</p>
+    <h2>Architecture & data flow</h2>
+    <p class="sub">One responsibility per script. Here is how a single swipe flows through the components:</p>
     <div class="arch">
       <div class="flow">
-        <div class="node"><b>SwipeInput</b> <span>— phím / vuốt → hướng</span></div>
+        <div class="node"><b>SwipeInput</b> <span>— keys / swipe → direction</span></div>
         <div class="arrow">OnSwipe(dir) ↓</div>
-        <div class="node"><b>BallController</b> <span>— lấy path, trượt bằng coroutine</span></div>
+        <div class="node"><b>BallController</b> <span>— gets the path, slides via coroutine</span></div>
         <div class="arrow">GetSlidePath / PaintCell ↓</div>
-        <div class="node"><b>GridManager → GridModel</b> <span>— tilemap ↔ logic lưới, sơn ô</span></div>
+        <div class="node"><b>GridManager → GridModel</b> <span>— tilemap ↔ grid logic, paints cells</span></div>
         <div class="arrow">OnCellPainted · OnProgressChanged ↓</div>
-        <div class="node"><b>PaintCellEffects · BallEffects · UIManager</b> <span>— hiệu ứng & HUD</span></div>
+        <div class="node"><b>PaintCellEffects · BallEffects · UIManager</b> <span>— effects & HUD</span></div>
         <div class="arrow">IsComplete / LevelTimer ↓</div>
-        <div class="node"><b>GameManager</b> <span>— OnWon / OnLost → popup, lưu tiến trình, LevelLoader.LoadNext()</span></div>
+        <div class="node"><b>GameManager</b> <span>— OnWon / OnLost → popup, save progress, LevelLoader.LoadNext()</span></div>
       </div>
       <div>
-<pre><span class="c">// GridModel.cs — trái tim của gameplay</span>
+<pre><span class="c">// GridModel.cs — the heart of the gameplay</span>
 <span class="k">public</span> <span class="t">List</span>&lt;<span class="t">Vector3Int</span>&gt; GetSlidePath(
     <span class="t">Vector3Int</span> start, <span class="t">Vector3Int</span> dir)
 {
@@ -342,7 +342,7 @@
     <span class="k">return</span> path;
 }
 
-<span class="c">// LevelTimer.cs — xếp hạng sao theo thời gian còn lại</span>
+<span class="c">// LevelTimer.cs — star rating from the time left</span>
 <span class="k">public static int</span> ComputeStars(<span class="k">float</span> remaining, <span class="k">float</span> limit)
 {
     <span class="k">if</span> (limit &lt;= <span class="s">0f</span>) <span class="k">return</span> <span class="s">3</span>;
@@ -359,7 +359,7 @@
 <section id="stack">
   <div class="wrap">
     <div class="eyebrow">Tech stack</div>
-    <h2>Công nghệ sử dụng</h2>
+    <h2>Built with</h2>
     <div class="chips">
       <span class="chip">Unity 6 (6000.0)</span>
       <span class="chip">C#</span>
@@ -380,28 +380,28 @@
 <section id="process">
   <div class="wrap">
     <div class="eyebrow">Process</div>
-    <h2>Quy trình phát triển</h2>
-    <p class="sub">Bắt đầu từ spec & plan, phát triển từng lớp có test đi kèm, commit nhỏ theo Conventional Commits.</p>
+    <h2>Development process</h2>
+    <p class="sub">It started from a written spec and plan, then grew layer by layer with tests alongside, in small Conventional Commits.</p>
     <div class="timeline">
-      <div class="tl"><h3>Spec & kế hoạch</h3><p>Viết design spec: mục tiêu, quyết định kiến trúc, bảng trách nhiệm từng script, phạm vi.</p><code>chore: initial Unity project with Roller Splat spec and plan</code></div>
-      <div class="tl"><h3>Logic lõi + test</h3><p>GridModel viết theo TDD, rồi tới Level data & GridManager bọc Tilemap.</p><code>feat: add GridModel with EditMode tests</code></div>
-      <div class="tl"><h3>Input & di chuyển</h3><p>Swipe/bàn phím, bóng trượt theo lưới với coroutine.</p><code>feat: add swipe/keyboard input and grid ball movement</code></div>
-      <div class="tl"><h3>Vòng chơi</h3><p>Load level, điều kiện thắng, HUD tiến độ, tài liệu dựng scene + level mẫu.</p><code>feat: add level loading, win condition and UI</code></div>
-      <div class="tl"><h3>Sửa lỗi từ playtest</h3><p>Giữ lại cú flick nhanh bị mất, padding camera cho màn dọc.</p><code>fix: keep fast flick swipes, pad portrait camera</code></div>
-      <div class="tl"><h3>Polish & meta-game</h3><p>Loading, Menu, Settings, level tính giờ, popup thắng/thua, hiệu ứng juice.</p><code>feat: kit-styled loading, menu, settings, timed levels and win/lose popups</code></div>
+      <div class="tl"><h3>Spec & plan</h3><p>A design spec covering goals, architecture decisions, per-script responsibilities and scope.</p><code>chore: initial Unity project with Roller Splat spec and plan</code></div>
+      <div class="tl"><h3>Core logic + tests</h3><p>GridModel written test-first, followed by the Level data and a GridManager that wraps the Tilemap.</p><code>feat: add GridModel with EditMode tests</code></div>
+      <div class="tl"><h3>Input & movement</h3><p>Swipe and keyboard input; the ball slides along the grid via a coroutine.</p><code>feat: add swipe/keyboard input and grid ball movement</code></div>
+      <div class="tl"><h3>Game loop</h3><p>Level loading, win condition, progress HUD, a scene setup guide and sample levels.</p><code>feat: add level loading, win condition and UI</code></div>
+      <div class="tl"><h3>Playtest fixes</h3><p>Fast flicks were being dropped; the camera needed padding in portrait.</p><code>fix: keep fast flick swipes, pad portrait camera</code></div>
+      <div class="tl"><h3>Polish & meta-game</h3><p>Loading screen, menu, settings, timed levels, win/lose popups and juice effects.</p><code>feat: kit-styled loading, menu, settings, timed levels and win/lose popups</code></div>
     </div>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    <h2>Cảm ơn đã xem! 👋</h2>
-    <p>Roller Splat 2D — dự án cá nhân của <b>tuyenvt</b>.</p>
+    <h2>Thanks for watching! 👋</h2>
+    <p>Roller Splat 2D, a personal project by <b>tuyenvt</b>.</p>
     <div class="btns">
-      <a class="btn btn-primary" href="https://github.com/tuyenvt1997/Roller-Splat" target="_blank" rel="noopener">Xem source trên GitHub</a>
+      <a class="btn btn-primary" href="https://github.com/tuyenvt1997/Roller-Splat" target="_blank" rel="noopener">View source on GitHub</a>
       <a class="btn btn-ghost" href="https://github.com/tuyenvt1997" target="_blank" rel="noopener">GitHub profile</a>
     </div>
-    <small>UI kit: GUI Pro – SuperCasual (Layer Lab, không đi kèm repo do license)</small>
+    <small>UI kit: GUI Pro – SuperCasual (Layer Lab; not included in the repo for licensing reasons)</small>
   </div>
 </footer>
 
@@ -467,7 +467,7 @@
       if (t < 1) return requestAnimationFrame(step);
       ball.x = ball.px = path[path.length - 1][0]; ball.y = ball.py = path[path.length - 1][1];
       anim = null; draw();
-      if (painted.size === walk.size) { won = true; msg.textContent = "★★★ Hoàn thành!"; }
+      if (painted.size === walk.size) { won = true; msg.textContent = "★★★ Level clear!"; }
     })(t0);
   }
   function rr(x, y, w, h, r) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); ctx.fill(); }
